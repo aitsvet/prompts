@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package transfer;
+
+option go_package = "github.com/aitsvet/prompts";
+
+// Transfer service definition.
+service Transfer {
+   // Переводит указанную сумму с одного аккаунта на другой
+   rpc TransferMoney (TransferRequest) returns (TransferResponse);
+   
+   // Получает данные об аккаунте, включая баланс и историю транзакций
+   rpc GetAccountData (GetDataRequest) returns (GetDataResponse);
+}
+
+// Запрос на перевод.
+message TransferRequest {
+  int64 from_account_id = 1; // ID аккаунта, с которого производится перевод
+  int64 to_account_id = 2; // ID аккаунта, на который производится перевод
+  int64 amount = 3; // Сумма для перевода
+}
+
+// Ответ на запрос на перевод.
+message TransferResponse {
+  bool success = 1; // Успешно ли произошел перевод
+}
+
+// Запрос на получение данных аккаунта.
+message GetDataRequest {
+  int64 account_id = 1; // ID аккаунта
+}
+
+// Ответ с данными аккаунта и его историей транзакций.
+message GetDataResponse {
+  int64 balance = 1; // Текущий баланс аккаунта
+  
+  message Transaction {
+    int64 id = 1; // ID транзакции
+    int64 amount = 2; // Сумма транзакции
+  }
+  
+  repeated Transaction transactions = 2; // История транзакций аккаунта
+}

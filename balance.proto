@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package balance;
+
+option go_package = "github.com/aitsvet/prompts";
+
+// Balance service definition.
+service Balance {
+  // Изменяет баланс аккаунта на указанную сумму
+  rpc ChangeBalance (ChangeRequest) returns (ChangeResponse);
+  
+  // Получает текущий баланс аккаунта и историю его транзакций
+  rpc GetAccountData (GetDataRequest) returns (GetDataResponse);
+}
+
+// Запрос на изменение баланса.
+message ChangeRequest {
+  int64 transaction_id = 1; // ID транзакции
+  int64 account_id = 2; // ID аккаунта
+  int64 amount = 3; // Сумма для изменения баланса
+}
+
+// Ответ на запрос на изменение баланса.
+message ChangeResponse {
+  bool success = 1; // Успешно ли произошло изменение баланса
+}
+
+// Запрос на получение данных аккаунта.
+message GetDataRequest {
+  int64 account_id = 1; // ID аккаунта
+}
+
+// Ответ с данными аккаунта и его историей транзакций.
+message GetDataResponse {
+  int64 balance = 1; // Текущий баланс аккаунта
+  
+  message Transaction {
+    int64 id = 1; // ID транзакции
+    int64 amount = 2; // Сумма транзакции
+  }
+  
+  repeated Transaction transactions = 2; // История транзакций аккаунта
+}
