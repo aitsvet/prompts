@@ -1,0 +1,56 @@
+version: '3'
+services:
+  db1:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: testdb
+    volumes:
+      - ./data/db1:/var/lib/postgresql/data
+  db2:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: testdb
+    volumes:
+      - ./data/db2:/var/lib/postgresql/data
+  app1:
+    build:
+      context: .
+      dockerfile: go.Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      DB_URL: postgres://root:secret@db1:5432/testdb?sslmode=disable
+      SERVER_ADDR: 0.0.0.0:5000
+    depends_on:
+      - db1
+  app2:
+    build:
+      context: .
+      dockerfile: go.Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      DB_URL: postgres://root:secret@db2:5432/testdb?sslmode=disable
+      SERVER_ADDR: 0.0.0.0:5001
+    depends_on:
+      - db2
+  appnew:
+    build:
+      context: .
+      dockerfile: java.Dockerfile
+    ports:
+       - "5002:5002"
+       - "6565:6565"
+    environment:
+      SERVER_PORT: 5002
+      balance_0_url: "app1:5000"
+      balance_1_url: "app2:5001"
+    depends_on:
+       - app1
+       - app2
+
+

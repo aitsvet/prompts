@@ -1,0 +1,22 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'net.devh:grpc-spring-boot-starter:2.15.0.RELEASE'
+    implementation 'io.grpc:grpc-netty-shaded:1.53.0'
+    implementation 'io.grpc:grpc-protobuf:1.53.0'
+    implementation 'io.grpc:grpc-stub:1.53.0'
+    implementation 'io.grpc:grpc-services:1.53.0'
+    implementation 'io.github.lognet:grpc-spring-boot-starter:5.1.5'
+}
